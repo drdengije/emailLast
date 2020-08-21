@@ -31,7 +31,7 @@ def granica(driver, xpath):
         print('elementgetter-', xpath, e)
         return 0
 
-webdriver_location = 'C:\gekodriver\geckodriver.exe'
+webdriver_location = 'C:\driver\geckodriver.exe'
 
 
 with open ('emails.csv', 'r') as csv_file:
@@ -51,7 +51,7 @@ with open ('emails.csv', 'r') as csv_file:
                 time.sleep(5)
                 klik(driver, "//div[@class='n6']", 5)
 
-                klik(driver, "//div[@class='TN bzz aHS-aHO']", 30)
+                klik(driver, "//div[@class='TN bzz aHS-aHO']", 10)
 
 
                 time.sleep(5)
@@ -68,8 +68,19 @@ with open ('emails.csv', 'r') as csv_file:
 
 
                     klikenzi = driver.find_elements_by_xpath('//span[@class="Di"]//div[@class="T-I J-J5-Ji amD T-I-awG T-I-ax7 T-I-Js-Gs L3"]')
-                    if (len(klikenzi) < 2):
+                    if (len(klikenzi) < 1):
                         checking=1
+                    if (len(klikenzi) == 1):
+                        for klikic in klikenzi:
+                            try:
+                                klikic.click()
+                                print('------------------------------------------------------------------------------')
+                                print("radi")
+                            except:
+                                checking = 1
+                                print('------------------------------------------------------------------------------')
+                                print("ne radi")   
+                    print('------------------------------------------------------------------------------')    
                     print(len(klikenzi))
                     if (checking == 1):
                         break
@@ -94,11 +105,10 @@ with open ('emails.csv', 'r') as csv_file:
 
                 #donja_granica= granica(driver, '/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div/div[1]/div[2]/div[1]/div[2]/div/span/div[1]/span/span[1]/span[2]')
                 #gornja_granica = granica(driver, '/html[1]/body[1]/div[7]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/span[1]/div[1]/span[1]/span[2]')
-
+                izlaz = 0
                 checking = 0
                 fje.spam_check(i, driver)
                 while (checking == 0):
-                    fje.spam_check(i, driver)
 
                     time.sleep(2)
                     sledece_dugme = driver.find_elements_by_xpath('//span[@class="Di"]//div[@class="T-I J-J5-Ji amD T-I-awG T-I-ax7 T-I-Js-Gs L3"]') # clicks the next page
@@ -110,8 +120,11 @@ with open ('emails.csv', 'r') as csv_file:
                             print('oce')
                         except:
                             print('nece')
+                            izlaz = 1
                     if (len(sledece_dugme) < 1):
                         checking = 1
+                    if(izlaz == 1 ):
+                        break   
                     fje.spam_check(i, driver)
                         #donja_granica = granica(driver, "(//span[@class='Dj']//span[@class='ts'])[5]")
                         #gornja_granica = granica(driver, "(//span[@class='Dj']//span[@class='ts'])[6]")
