@@ -31,7 +31,8 @@ def granica(driver, xpath):
         print('elementgetter-', xpath, e)
         return 0
 
-webdriver_location = 'C:\driver\geckodriver.exe'
+#webdriver_location = 'C:\driver\geckodriver.exe'
+webdriver_location = 'C:\gekodriver\geckodriver.exe'
 
 
 with open ('emails.csv', 'r') as csv_file:
@@ -49,9 +50,9 @@ with open ('emails.csv', 'r') as csv_file:
                 #remove_security(i, driver)
                 driver.maximize_window()
                 time.sleep(5)
-                klik(driver, "//div[@class='n6']", 5)
+                klik(driver, "//div[@class='n6']", 5) #more
 
-                klik(driver, "//div[@class='TN bzz aHS-aHO']", 10)
+                klik(driver, "//div[@class='TN bzz aHS-aHO']", 10) #all mail
 
 
                 time.sleep(5)
@@ -117,9 +118,9 @@ with open ('emails.csv', 'r') as csv_file:
                     for dugme in sledece_dugme:
                         try:
                             dugme.click()
-                            print('oce')
+                            print('spam_check: next page button is working')
                         except:
-                            print('nece')
+                            print('spam_check: next page button is NOT working')
                             izlaz = 1
                     if (len(sledece_dugme) < 1):
                         checking = 1
@@ -128,7 +129,41 @@ with open ('emails.csv', 'r') as csv_file:
                     fje.spam_check(i, driver)
                         #donja_granica = granica(driver, "(//span[@class='Dj']//span[@class='ts'])[5]")
                         #gornja_granica = granica(driver, "(//span[@class='Dj']//span[@class='ts'])[6]")
-    
+
+                klik(driver, "//div[@class='TN bzz aHS-bnt']//div[@class='aio UKr6le']", 10) #inbox click
+                checking = 0
+                fje.read_email(i, driver)
+                #qwe = driver.find_elements_by_xpath('//span[@class="Di"]//div[@class="T-I J-J5-Ji amD T-I-awG T-I-ax7 T-I-Js-Gs L3"]')
+                while (checking == 0):
+
+                    klikenzi = driver.find_elements_by_xpath('//span[@class="Di"]//div[@class="T-I J-J5-Ji amD T-I-awG T-I-ax7 T-I-Js-Gs L3"]')
+                    if (len(klikenzi) < 1):
+                        checking = 1
+                    if (len(klikenzi) == 1):
+                        for klikic in klikenzi:
+                            try:
+                                klikic.click()
+                                print('------------------------------------------------------------------------------')
+                                print("read_email function: one button found is working")
+                            except:
+                                checking = 1
+                                print('------------------------------------------------------------------------------')
+                                print("read_email function:  next page button is not clickable--found one")
+                    print('------------------------------------------------------------------------------')
+                    print(len(klikenzi))
+                    if (checking == 1):
+                        break
+                    for klikic in klikenzi:
+                        try:
+                            klikic.click()
+                        except:
+                            print("read_email function:  next page button is not clickable--found more than one")
+                        print(klikic)
+                        time.sleep(2)
+
+                    fje.read_email(i, driver)
+                    time.sleep(10)
+
 
 
 

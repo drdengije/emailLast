@@ -7,9 +7,13 @@ import os
 import selenium
 from selenium.webdriver.common.by import By #import
 from selenium import webdriver
-#from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains
 import time
 import csv
+from selenium.webdriver.common.keys import Keys
+import selenium.webdriver.support.ui as ui
+import random
+import time
 
 
 cwdir = os.path.dirname(os.path.abspath(__file__))
@@ -188,7 +192,7 @@ def spam_check(i, driver):     #Pajce "pravio" fju
                             spam_button.click()
                             time.sleep(2)
                         except:
-                            print('err')
+                            print('spam_check: send from spam fail')
 
 
 
@@ -220,10 +224,76 @@ def email_check(i, driver):              #Pajce "pravio" fju
                             spam_button.click()
                             time.sleep(2)
                         except:
+                            print('email_check: send to spam fail')
+
+
+
+
+def read_email(i, driver):
+    email_boxes = driver.find_elements_by_xpath("//div[@class='Cp']//tr")
+    for e,email_box in enumerate(email_boxes) :
+        time.sleep(2)
+        email_class = email_box.find_element_by_xpath(".//span[@email]")
+        email_text = email_class.get_attribute('email')
+        with open('whitelist.csv', 'r') as csv_file:
+            csv_reader = csv.reader(csv_file)
+            for row in csv_reader:
+                if (str(row).strip("['']") == email_text):
+                    #transfer_write(email_text, '   email opened')
+                    for part in email_box.find_elements_by_xpath('.//td//div[@role="link"]'):
+                        try:
+                            part.click()
+                            print(part.get_attribute('innerHTML'))
+                            print('read_email function is working')
+                            time.sleep(10)
+                        except:
                             print('err')
+                        reply_to_mail(i, driver)
+                        try:
+                            time.sleep(2)
+                            transfer_write(email_text, 'email read links opened and answerd')
+                            driver.back()
+                            time.sleep(10)
+                        except:
+                            print('read_email function is NOT working')
+
+
+def reply_to_mail(i, driver):
+    try:
+        linkovi = driver.find_elements_by_xpath('//div[@dir="ltr"]//a')
+        for link in linkovi:
+            time.sleep(2)
+            link.click()
+            time.sleep(5)
+            allTabs = driver.window_handles
+            driver.switch_to.window(allTabs[1])
+            time.sleep(5)
+            driver.close()
+            time.sleep(5)
+            driver.switch_to.window(allTabs[0])
+            time.sleep(2)
+    except:
+        print("err")
+    try:
+        responses_list = ["thanks", "appreciate it", "hey great thank you!", "awesome"]
+
+        time.sleep(3)
+        reply_button = driver.find_element_by_xpath('(//tr//span[@role="link"])[1]')
+        reply_button.click()
+        time.sleep(2)
+        message_box = driver.find_element_by_xpath('//div[@class="Am Al editable LW-avf tS-tW"]')
+        message_box.send_keys(responses_list[random.randint(0,2)])
+        time.sleep(5)
+        send_button = driver.find_element_by_xpath('//div[@class="T-I J-J5-Ji aoO v7 T-I-atl L3"]')
+        send_button.click()
+        time.sleep(2)
+    except:
+        print('err')
+
 
 
 def transfer_write(mail, description):
+
     with open('transfers.csv', 'a') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow([mail, description])
