@@ -233,8 +233,11 @@ def read_email(i, driver):
     email_boxes = driver.find_elements_by_xpath("//div[@class='Cp']//tr")
     for e,email_box in enumerate(email_boxes) :
         time.sleep(2)
-        email_class = email_box.find_element_by_xpath(".//span[@email]")
-        email_text = email_class.get_attribute('email')
+        try:
+            email_class = email_box.find_element_by_xpath(".//span[@email]")
+            email_text = email_class.get_attribute('email')
+        except:
+            break
         with open('whitelist.csv', 'r') as csv_file:
             csv_reader = csv.reader(csv_file)
             for row in csv_reader:

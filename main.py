@@ -132,10 +132,12 @@ with open ('emails.csv', 'r') as csv_file:
 
                 klik(driver, "//div[@class='TN bzz aHS-bnt']//div[@class='aio UKr6le']", 10) #inbox click
                 checking = 0
-                fje.read_email(i, driver)
+                #fje.read_email(i, driver)
                 #qwe = driver.find_elements_by_xpath('//span[@class="Di"]//div[@class="T-I J-J5-Ji amD T-I-awG T-I-ax7 T-I-Js-Gs L3"]')
                 while (checking == 0):
-
+                    print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                    fje.read_email(i, driver)
+                    needs_out = 0
                     klikenzi = driver.find_elements_by_xpath('//span[@class="Di"]//div[@class="T-I J-J5-Ji amD T-I-awG T-I-ax7 T-I-Js-Gs L3"]')
                     if (len(klikenzi) < 1):
                         checking = 1
@@ -151,17 +153,19 @@ with open ('emails.csv', 'r') as csv_file:
                                 print("read_email function:  next page button is not clickable--found one")
                     print('------------------------------------------------------------------------------')
                     print(len(klikenzi))
-                    if (checking == 1):
-                        break
-                    for klikic in klikenzi:
-                        try:
-                            klikic.click()
-                        except:
-                            print("read_email function:  next page button is not clickable--found more than one")
-                        print(klikic)
-                        time.sleep(2)
-
-                    fje.read_email(i, driver)
+                    if(len(klikenzi) > 1):
+                        for klikic in klikenzi:
+                            try:
+                                klikic.click()
+                            except:
+                                print("read_email function:  next page button is not clickable--found more than one")
+                                print(klikic)
+                                time.sleep(2)
+                                needs_out = needs_out + 1
+                    if (needs_out > 1):
+                        checking = 1
+                        print('site not responding')
+                    #fje.read_email(i, driver)
                     time.sleep(10)
 
 
