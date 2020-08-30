@@ -242,9 +242,10 @@ def psoition_of_emails(driver):
 
 def read_email(i, driver):
     current_email = 0
-    function_end = 0
-    while(function_end == 0):
+    attempt_number = 0
+    while(attempt_number < 3):
         f_list_of_emails, email_boxes = psoition_of_emails(driver)
+        print(f_list_of_emails)
         try:
             for e,email_box in enumerate(email_boxes) :
                 time.sleep(2)
@@ -266,8 +267,13 @@ def read_email(i, driver):
                         time.sleep(10)
         except:
             print('error')
-        if(current_email == f_list_of_emails[-1]):
-            function_end = 1
+        attempt_number = attempt_number + 1
+        if(e>49):
+            attempt_number = 3
+
+        print(current_email)
+        print(f_list_of_emails[-1])
+
 
     # print()
     #
@@ -319,18 +325,18 @@ def reply_to_mail(i, driver):
     time.sleep(2)
 
 
-    # linkovi = driver.find_elements_by_xpath('//div[@dir="ltr"]//a')
-    # for link in linkovi:
-    #     time.sleep(2)
-    #     link.click()
-    #     time.sleep(5)
-    #     allTabs = driver.window_handles
-    #     driver.switch_to.window(allTabs[1])
-    #     time.sleep(5)
-    #     driver.close()
-    #     time.sleep(5)
-    #     driver.switch_to.window(allTabs[0])
-    #     time.sleep(2)
+    linkovi = driver.find_elements_by_xpath('//div[@dir="ltr"]//a')
+    for link in linkovi:
+        time.sleep(2)
+        link.click()
+        time.sleep(5)
+        allTabs = driver.window_handles
+        driver.switch_to.window(allTabs[1])
+        time.sleep(5)
+        driver.close()
+        time.sleep(5)
+        driver.switch_to.window(allTabs[0])
+        time.sleep(2)
 
 
 
